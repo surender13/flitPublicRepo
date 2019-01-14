@@ -3,9 +3,6 @@ package com.flit.runtime.spring;
 import com.flit.runtime.ErrorCode;
 import com.flit.runtime.FlitException;
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.util.HashMap;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -15,11 +12,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+
 @ControllerAdvice
 @Component
 public class FlitExceptionHandler extends ResponseEntityExceptionHandler {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(FlitExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FlitExceptionHandler.class);
 
 
     @ExceptionHandler(Exception.class)
