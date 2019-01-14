@@ -2,6 +2,10 @@ package com.flit.runtime.spring;
 
 import com.flit.runtime.ErrorCode;
 import com.flit.runtime.FlitException;
+import com.google.protobuf.InvalidProtocolBufferException;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -11,15 +15,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
-
 @ControllerAdvice
 @Component
 public class FlitExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FlitExceptionHandler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FlitExceptionHandler.class);
 
 
     @ExceptionHandler(Exception.class)
@@ -38,6 +38,21 @@ public class FlitExceptionHandler extends ResponseEntityExceptionHandler {
             .status(ErrorCode.INTERNAL.getHttpStatus())
             .contentType(MediaType.APPLICATION_JSON)
             .body(response);
+    }
+
+    @ExceptionHandler(InvalidProtocolBufferException.class)
+    public ResponseEntity<?> handlehandleInvalidProtocolBufferException(HttpServletRequest request, Exception e) {
+      LOGGER.error("InvalidProtocolBufferException: request = {}, method = {}, msg= {}",
+          request.getRequestURI(), request.getMethod(), e.getMessage(), e);
+
+      Map<String, Object> response = new HashMap<>();
+      response.put("code", ErrorCode.INVALID_ARGUMENT);
+      response.put("msg", e.getMessage());
+
+      return ResponseEntity
+          .status(ErrorCode.INVALID_ARGUMENT.getHttpStatus())
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(response);
     }
 
     @ExceptionHandler(FlitException.class)
