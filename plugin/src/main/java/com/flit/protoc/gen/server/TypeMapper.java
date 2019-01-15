@@ -3,6 +3,7 @@ package com.flit.protoc.gen.server;
 import com.google.protobuf.DescriptorProtos;
 import com.squareup.javapoet.ClassName;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,8 @@ public class TypeMapper {
 
     if (clazz == null || clazz.isEmpty()) {
 
-      char[] classname = proto.getName().substring(0, proto.getName().lastIndexOf('.')).toCharArray();
+      String basename = new File(proto.getName()).getName();
+      char[] classname = basename.substring(0, basename.lastIndexOf('.')).toCharArray();
       StringBuilder sb = new StringBuilder();
 
       char previous = '_';
@@ -70,7 +72,7 @@ public class TypeMapper {
       }
     }
 
-    return clazz;
+    return String.join(".", proto.getOptions().getJavaPackage(), clazz);
   }
 
 }
