@@ -26,7 +26,6 @@ public class TypeMapperTest {
   public void protoPackage() {
     DescriptorProtos.FileOptions options = DescriptorProtos.FileOptions.newBuilder()
         .setJavaMultipleFiles(false)
-        .setJavaOuterClassname("Mapper")
         .build();
 
     DescriptorProtos.FileDescriptorProto proto = DescriptorProtos.FileDescriptorProto.newBuilder()
