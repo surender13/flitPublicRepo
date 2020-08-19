@@ -1,0 +1,52 @@
+[0] = package com.example.helloworld;
+
+public interface RpcHelloWorld {
+  Helloworld.HelloResp handleHello(Helloworld.HelloReq in);
+
+  Helloworld.HelloResp handleHelloAgain(Helloworld.HelloReq in);
+}
+
+[1] = package com.example.helloworld;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+@Path("/twirp/com.example.helloworld.HelloWorld")
+public class RpcHelloWorldResource {
+  private final RpcHelloWorld service;
+
+  public RpcHelloWorldResource(RpcHelloWorld service) {
+    this.service = service;
+  }
+
+  @POST
+  @Path("/Hello")
+  @Produces({
+      "application/protobuf",
+      "application/json"
+  })
+  @Consumes({
+      "application/protobuf",
+      "application/json"
+  })
+  public Helloworld.HelloResp handleHello(Helloworld.HelloReq request) {
+    return service.handleHello(request);
+  }
+
+  @POST
+  @Path("/HelloAgain")
+  @Produces({
+      "application/protobuf",
+      "application/json"
+  })
+  @Consumes({
+      "application/protobuf",
+      "application/json"
+  })
+  public Helloworld.HelloResp handleHelloAgain(Helloworld.HelloReq request) {
+    return service.handleHelloAgain(request);
+  }
+}
+

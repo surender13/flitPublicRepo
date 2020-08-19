@@ -1,0 +1,36 @@
+[0] = package com.example.helloworld;
+
+public interface RpcStatus {
+  StatusOuterClass.StatusResponse handleGetStatus(Core.Empty in);
+}
+
+[1] = package com.example.helloworld;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+@Path("/twirp/com.example.helloworld.Status")
+public class RpcStatusResource {
+  private final RpcStatus service;
+
+  public RpcStatusResource(RpcStatus service) {
+    this.service = service;
+  }
+
+  @POST
+  @Path("/GetStatus")
+  @Produces({
+      "application/protobuf",
+      "application/json"
+  })
+  @Consumes({
+      "application/protobuf",
+      "application/json"
+  })
+  public StatusOuterClass.StatusResponse handleGetStatus(Core.Empty request) {
+    return service.handleGetStatus(request);
+  }
+}
+

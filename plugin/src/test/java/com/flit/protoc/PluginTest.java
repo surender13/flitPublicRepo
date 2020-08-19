@@ -14,7 +14,7 @@ public class PluginTest {
     PluginProtos.CodeGeneratorResponse response = plugin.process();
 
     assertTrue("Expected an error for no parameters", response.hasError());
-    assertEquals("Incorrect error message", "Usage: --flit_out=target=server,type=[spring|undertow]:<PATH>", response.getError());
+    assertEquals("Incorrect error message", "Usage: --flit_out=target=server,type=[spring|undertow|jaxrs]:<PATH>", response.getError());
   }
 
   @Test public void test_NoTargetSpecified() {
