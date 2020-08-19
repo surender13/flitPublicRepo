@@ -7,12 +7,13 @@ It supports the generation of Java based servers with the following flavours sup
 
 + [Spring Boot/Spring MVC](https://spring.io/projects/spring-boot "Spring Boot")
 + [Undertow](http://undertow.io/ "Undertow")
++ JAX-RS ([Jersey](https://eclipse-ee4j.github.io/jersey/), [Apache CFX](http://cxf.apache.org/))
 
 ## Building & Running
 
 ### Requirements
 
-The build has been tested with [Oracle's JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html "JDK Downloads") (version 1.8)
+The build has been tested with [Zulu's OpenJDK](https://www.azul.com/downloads/zulu-community/?architecture=x86-64-bit&package=jdk "JDK Downloads") (version 11)
 
 The build uses gradle to generate the artifacts. No installation is required as the project uses the
 [gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html "gradle wrapper") setup.
@@ -27,6 +28,7 @@ The project is split into the following modules:
 |:------------------|:------------------------------------------------------|
 | `plugin`          | The `protoc` plugin                                   |
 | `runtime:core`    | Core functionality required by generated code         |
+| `runtime:jaxrs`   | Runtime library for JAX-RS servers                    |
 | `runtime:spring`  | Runtime library for Spring MVC/Boot servers           |
 | `runtime:undertow`| Runtime library for Undertow servers                  |
 
