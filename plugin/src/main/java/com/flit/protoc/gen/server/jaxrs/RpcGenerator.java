@@ -56,16 +56,16 @@ public class RpcGenerator extends BaseGenerator {
             .addMember("value", "$S", "/" + mdp.getName())
             .build())
         .addAnnotation(AnnotationSpec.builder(PRODUCES)
-            .addMember("value", "$S", "application/protobuf")
+            .addMember("value", "$S", "application/x-protobuf")
             .addMember("value", "$S", "application/json")
             .build())
         .addAnnotation(AnnotationSpec.builder(CONSUMES)
-            .addMember("value", "$S", "application/protobuf")
+            .addMember("value", "$S", "application/x-protobuf")
             .addMember("value", "$S", "application/json")
             .build())
         .addParameter(inputType, "request")
-        .addStatement("return service.handle$L(request)", mdp.getName())
-        .returns(outputType)
+        .addStatement("return Response.ok(service.handle$L(request)).build()", mdp.getName())
+        .returns(ClassName.bestGuess("javax.ws.rs.core.Response"))
         .build());
   }
 

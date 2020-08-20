@@ -12,6 +12,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 @Path("/twirp/com.example.helloworld.HelloWorld")
 public class RpcHelloWorldResource {
@@ -24,29 +25,29 @@ public class RpcHelloWorldResource {
   @POST
   @Path("/Hello")
   @Produces({
-      "application/protobuf",
+      "application/x-protobuf",
       "application/json"
   })
   @Consumes({
-      "application/protobuf",
+      "application/x-protobuf",
       "application/json"
   })
-  public Helloworld.HelloResp handleHello(Helloworld.HelloReq request) {
-    return service.handleHello(request);
+  public Response handleHello(Helloworld.HelloReq request) {
+    return Response.ok(service.handleHello(request)).build();
   }
 
   @POST
   @Path("/HelloAgain")
   @Produces({
-      "application/protobuf",
+      "application/x-protobuf",
       "application/json"
   })
   @Consumes({
-      "application/protobuf",
+      "application/x-protobuf",
       "application/json"
   })
-  public Helloworld.HelloResp handleHelloAgain(Helloworld.HelloReq request) {
-    return service.handleHelloAgain(request);
+  public Response handleHelloAgain(Helloworld.HelloReq request) {
+    return Response.ok(service.handleHelloAgain(request)).build();
   }
 }
 
