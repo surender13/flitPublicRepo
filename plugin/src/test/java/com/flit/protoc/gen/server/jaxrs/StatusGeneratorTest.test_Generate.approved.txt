@@ -24,11 +24,11 @@ public class RpcStatusResource {
   @Path("/GetStatus")
   @Produces({
       "application/protobuf",
-      "application/json"
+      "application/json; charset=utf-8"
   })
   @Consumes({
       "application/protobuf",
-      "application/json"
+      "application/json; charset=utf-8"
   })
   public Response handleGetStatus(Core.Empty request) {
     return Response.ok(service.handleGetStatus(request)).build();

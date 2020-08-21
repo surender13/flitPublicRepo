@@ -26,11 +26,11 @@ public class RpcHelloWorldResource {
   @Path("/Hello")
   @Produces({
       "application/protobuf",
-      "application/json"
+      "application/json; charset=utf-8"
   })
   @Consumes({
       "application/protobuf",
-      "application/json"
+      "application/json; charset=utf-8"
   })
   public Response handleHello(Helloworld.HelloReq request) {
     return Response.ok(service.handleHello(request)).build();
@@ -40,11 +40,11 @@ public class RpcHelloWorldResource {
   @Path("/HelloAgain")
   @Produces({
       "application/protobuf",
-      "application/json"
+      "application/json; charset=utf-8"
   })
   @Consumes({
       "application/protobuf",
-      "application/json"
+      "application/json; charset=utf-8"
   })
   public Response handleHelloAgain(Helloworld.HelloReq request) {
     return Response.ok(service.handleHelloAgain(request)).build();

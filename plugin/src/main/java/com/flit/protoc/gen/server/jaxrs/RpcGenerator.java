@@ -2,6 +2,7 @@ package com.flit.protoc.gen.server.jaxrs;
 
 import com.flit.protoc.gen.server.BaseGenerator;
 import com.flit.protoc.gen.server.TypeMapper;
+import com.google.common.net.MediaType;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.DescriptorProtos.MethodDescriptorProto;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
@@ -55,12 +56,12 @@ public class RpcGenerator extends BaseGenerator {
             .addMember("value", "$S", "/" + mdp.getName())
             .build())
         .addAnnotation(AnnotationSpec.builder(PRODUCES)
-            .addMember("value", "$S", "application/protobuf")
-            .addMember("value", "$S", "application/json")
+            .addMember("value", "$S", MediaType.PROTOBUF.toString())
+            .addMember("value", "$S", MediaType.JSON_UTF_8.toString())
             .build())
         .addAnnotation(AnnotationSpec.builder(CONSUMES)
-            .addMember("value", "$S", "application/protobuf")
-            .addMember("value", "$S", "application/json")
+            .addMember("value", "$S", MediaType.PROTOBUF.toString())
+            .addMember("value", "$S", MediaType.JSON_UTF_8.toString())
             .build())
         .addParameter(inputType, "request")
         .addStatement("return Response.ok(service.handle$L(request)).build()", mdp.getName())

@@ -3,6 +3,7 @@ package com.flit.protoc.gen.server.spring;
 import com.flit.protoc.gen.server.BaseGenerator;
 import com.flit.protoc.gen.server.TypeMapper;
 import com.flit.protoc.gen.server.Types;
+import com.google.common.net.MediaType;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.compiler.PluginProtos;
 import com.squareup.javapoet.*;
@@ -47,7 +48,7 @@ class RpcGenerator extends BaseGenerator {
       .addAnnotation(AnnotationSpec.builder(PostMapping).addMember("value", "$S", route).build())
       .addStatement("boolean json = false")
       .addStatement("final $T data", inputType)
-      .beginControlFlow("if (request.getContentType().equals($S))", "application/protobuf")
+      .beginControlFlow("if (request.getContentType().equals($S))", MediaType.PROTOBUF.toString())
       .addStatement("data = $T.parseFrom(request.getInputStream())", inputType)
       .nextControlFlow("else if (request.getContentType().startsWith($S))", "application/json")
       .addStatement("json = true")
@@ -66,12 +67,12 @@ class RpcGenerator extends BaseGenerator {
       .addStatement("response.setStatus(200)")
       // send the response
       .beginControlFlow("if (json)")
-      .addStatement("response.setContentType($S)", "application/json;charset=UTF-8")
+      .addStatement("response.setContentType($S)", MediaType.JSON_UTF_8.toString())
       .addStatement("response.getOutputStream().write($T.printer().omittingInsignificantWhitespace().print(retval).getBytes($T.UTF_8))",
         Types.JsonFormat,
         Types.StandardCharsets)
       .nextControlFlow("else")
-      .addStatement("response.setContentType($S)", "application/protobuf")
+      .addStatement("response.setContentType($S)", MediaType.PROTOBUF.toString())
       .addStatement("retval.writeTo(response.getOutputStream())")
       .endControlFlow()
       .build());

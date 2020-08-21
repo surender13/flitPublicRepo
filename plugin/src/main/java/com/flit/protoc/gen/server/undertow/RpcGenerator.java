@@ -3,6 +3,7 @@ package com.flit.protoc.gen.server.undertow;
 import com.flit.protoc.gen.server.BaseGenerator;
 import com.flit.protoc.gen.server.TypeMapper;
 import com.flit.protoc.gen.server.Types;
+import com.google.common.net.MediaType;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.compiler.PluginProtos;
 import com.squareup.javapoet.*;
@@ -110,7 +111,7 @@ class RpcGenerator extends BaseGenerator {
       .addStatement("boolean json = false")
       .addStatement("final $T data", inputType)
       .addStatement("final String contentType = exchange.getRequestHeaders().get($T.CONTENT_TYPE).getFirst()", Headers)
-      .beginControlFlow("if (contentType.equals($S))", "application/protobuf")
+      .beginControlFlow("if (contentType.equals($S))", MediaType.PROTOBUF.toString())
       .addStatement("data = $T.parseFrom(exchange.getInputStream())", inputType)
       .nextControlFlow("else if (contentType.startsWith($S))", "application/json")
       .addStatement("json = true")
@@ -126,10 +127,10 @@ class RpcGenerator extends BaseGenerator {
       .addStatement("exchange.setStatusCode(200)")
       // put the result on the wire
       .beginControlFlow("if (json)")
-      .addStatement("exchange.getResponseHeaders().put($T.CONTENT_TYPE, $S)", Headers, "application/json;charset=UTF-8")
+      .addStatement("exchange.getResponseHeaders().put($T.CONTENT_TYPE, $S)", Headers, MediaType.JSON_UTF_8.toString())
       .addStatement("exchange.getResponseSender().send($T.printer().omittingInsignificantWhitespace().print(response))", JsonFormat)
       .nextControlFlow("else")
-      .addStatement("exchange.getResponseHeaders().put($T.CONTENT_TYPE, $S)", Headers, "application/protobuf")
+      .addStatement("exchange.getResponseHeaders().put($T.CONTENT_TYPE, $S)", Headers, MediaType.PROTOBUF.toString())
       .addStatement("response.writeTo(exchange.getOutputStream())")
       .endControlFlow()
       .build());
