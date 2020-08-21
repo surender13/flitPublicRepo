@@ -22,23 +22,26 @@ import javax.ws.rs.ext.Provider;
 public class ProtobufMessageProvider implements MessageBodyWriter<Message>,
     MessageBodyReader<Message> {
 
+  private static final String JSON = "json";
+  private static final String PROTOBUF = "protobuf";
+
   @Override
   public boolean isWriteable(Class<?> type, Type genericType,
       Annotation[] annotations, MediaType mediaType) {
     return Message.class.isAssignableFrom(type) && (
-        "json".equals(mediaType.getSubtype()) || "protobuf".equals(mediaType.getSubtype()));
+        JSON.equals(mediaType.getSubtype()) || PROTOBUF.equals(mediaType.getSubtype()));
   }
 
   @Override
-  public long getSize(Message t, Class<?> type,
+  public long getSize(Message message, Class<?> type,
       Type genericType, Annotation[] annotations,
       MediaType mediaType) {
-    if (t == null) {
+    if (message == null) {
       return -1;
     }
     ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
     try {
-      writeTo(t, type, genericType, annotations, mediaType, null, out);
+      writeTo(message, type, genericType, annotations, mediaType, null, out);
     } catch (java.io.IOException e) {
       return -1;
     }
@@ -53,10 +56,10 @@ public class ProtobufMessageProvider implements MessageBodyWriter<Message>,
       OutputStream entityStream)
       throws IOException, WebApplicationException {
     switch (mediaType.getSubtype()) {
-      case "protobuf":
+      case PROTOBUF:
         t.writeTo(entityStream);
         break;
-      case "json":
+      case JSON:
         entityStream
             .write(JsonFormat.printer().print(t).getBytes(StandardCharsets.UTF_8));
         break;
@@ -69,7 +72,7 @@ public class ProtobufMessageProvider implements MessageBodyWriter<Message>,
   public boolean isReadable(Class<?> type, Type genericType,
       Annotation[] annotations, MediaType mediaType) {
     return Message.class.isAssignableFrom(type) && (
-        "json".equals(mediaType.getSubtype()) || "protobuf".equals(mediaType.getSubtype()));
+        JSON.equals(mediaType.getSubtype()) || PROTOBUF.equals(mediaType.getSubtype()));
   }
 
   @Override
@@ -78,10 +81,10 @@ public class ProtobufMessageProvider implements MessageBodyWriter<Message>,
       throws WebApplicationException {
     try {
       switch (mediaType.getSubtype()) {
-        case "protobuf":
+        case PROTOBUF:
           Method m = type.getMethod("parseFrom", InputStream.class);
           return (Message) m.invoke(null, entityStream);
-        case "json":
+        case JSON:
           Message.Builder msg = (Message.Builder) type
               .getMethod("newBuilder").invoke(null);
           JsonFormat.parser()

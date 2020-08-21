@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -35,7 +36,7 @@ public class FlitExceptionMapperTest {
         .withMessage("with this message")
         .build();
     Response response = flitExceptionMapper.toResponse(flit);
-    assertEquals(response.getStatus(), 500);
+    assertEquals(response.getStatus(), Status.INTERNAL_SERVER_ERROR.getStatusCode());
     Map<String, Object> expectedResult = Map.of("msg", "with this message", "code", "internal");
     assertEquals(response.getEntity(), expectedResult);
     assertEquals(response.getMediaType(), MediaType.APPLICATION_JSON_TYPE);
