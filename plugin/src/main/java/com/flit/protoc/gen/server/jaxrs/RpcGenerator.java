@@ -48,7 +48,6 @@ public class RpcGenerator extends BaseGenerator {
 
   private void addHandleMethod(MethodDescriptorProto mdp) {
     ClassName inputType = mapper.get(mdp.getInputType());
-    ClassName outputType = mapper.get(mdp.getOutputType());
     rpcResource.addMethod(MethodSpec.methodBuilder("handle" + mdp.getName())
         .addModifiers(Modifier.PUBLIC)
         .addAnnotation(POST)
@@ -56,11 +55,11 @@ public class RpcGenerator extends BaseGenerator {
             .addMember("value", "$S", "/" + mdp.getName())
             .build())
         .addAnnotation(AnnotationSpec.builder(PRODUCES)
-            .addMember("value", "$S", "application/x-protobuf")
+            .addMember("value", "$S", "application/protobuf")
             .addMember("value", "$S", "application/json")
             .build())
         .addAnnotation(AnnotationSpec.builder(CONSUMES)
-            .addMember("value", "$S", "application/x-protobuf")
+            .addMember("value", "$S", "application/protobuf")
             .addMember("value", "$S", "application/json")
             .build())
         .addParameter(inputType, "request")

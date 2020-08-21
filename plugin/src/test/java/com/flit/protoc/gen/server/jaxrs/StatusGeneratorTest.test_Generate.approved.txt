@@ -23,11 +23,11 @@ public class RpcStatusResource {
   @POST
   @Path("/GetStatus")
   @Produces({
-      "application/x-protobuf",
+      "application/protobuf",
       "application/json"
   })
   @Consumes({
-      "application/x-protobuf",
+      "application/protobuf",
       "application/json"
   })
   public Response handleGetStatus(Core.Empty request) {

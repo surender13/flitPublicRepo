@@ -25,11 +25,11 @@ public class RpcHelloWorldResource {
   @POST
   @Path("/Hello")
   @Produces({
-      "application/x-protobuf",
+      "application/protobuf",
       "application/json"
   })
   @Consumes({
-      "application/x-protobuf",
+      "application/protobuf",
       "application/json"
   })
   public Response handleHello(Helloworld.HelloReq request) {
@@ -39,11 +39,11 @@ public class RpcHelloWorldResource {
   @POST
   @Path("/HelloAgain")
   @Produces({
-      "application/x-protobuf",
+      "application/protobuf",
       "application/json"
   })
   @Consumes({
-      "application/x-protobuf",
+      "application/protobuf",
       "application/json"
   })
   public Response handleHelloAgain(Helloworld.HelloReq request) {
