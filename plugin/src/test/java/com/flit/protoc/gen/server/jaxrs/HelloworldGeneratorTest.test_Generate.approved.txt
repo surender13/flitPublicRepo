@@ -14,18 +14,22 @@ import java.lang.Exception;
 import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 
-@RestController
-public class RpcHelloWorldController {
-  @Autowired
-  private RpcHelloWorld service;
+@Path("/twirp/com.example.helloworld.HelloWorld")
+public class RpcHelloWorldResource {
+  private final RpcHelloWorld service;
 
-  @PostMapping("/twirp/com.example.helloworld.HelloWorld/Hello")
-  public void handleHello(HttpServletRequest request, HttpServletResponse response) throws
-      Exception {
+  public RpcHelloWorldResource(RpcHelloWorld service) {
+    this.service = service;
+  }
+
+  @POST
+  @Path("/Hello")
+  public void handleHello(@Context HttpServletRequest request,
+      @Context HttpServletResponse response) throws Exception {
     boolean json = false;
     final Helloworld.HelloReq data;
     if (request.getContentType().equals("application/protobuf")) {
@@ -37,6 +41,7 @@ public class RpcHelloWorldController {
       data = builder.build();
     } else {
       response.setStatus(415);
+      response.flushBuffer();
       return;
     }
     Helloworld.HelloResp retval = service.handleHello(data);
@@ -48,11 +53,13 @@ public class RpcHelloWorldController {
       response.setContentType("application/protobuf");
       retval.writeTo(response.getOutputStream());
     }
+    response.flushBuffer();
   }
 
-  @PostMapping("/twirp/com.example.helloworld.HelloWorld/HelloAgain")
-  public void handleHelloAgain(HttpServletRequest request, HttpServletResponse response) throws
-      Exception {
+  @POST
+  @Path("/HelloAgain")
+  public void handleHelloAgain(@Context HttpServletRequest request,
+      @Context HttpServletResponse response) throws Exception {
     boolean json = false;
     final Helloworld.HelloReq data;
     if (request.getContentType().equals("application/protobuf")) {
@@ -64,6 +71,7 @@ public class RpcHelloWorldController {
       data = builder.build();
     } else {
       response.setStatus(415);
+      response.flushBuffer();
       return;
     }
     Helloworld.HelloResp retval = service.handleHelloAgain(data);
@@ -75,6 +83,7 @@ public class RpcHelloWorldController {
       response.setContentType("application/protobuf");
       retval.writeTo(response.getOutputStream());
     }
+    response.flushBuffer();
   }
 }
 

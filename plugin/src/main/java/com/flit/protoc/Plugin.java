@@ -2,6 +2,7 @@ package com.flit.protoc;
 
 import com.flit.protoc.gen.Generator;
 import com.flit.protoc.gen.GeneratorException;
+import com.flit.protoc.gen.server.jaxrs.JaxrsGenerator;
 import com.flit.protoc.gen.server.spring.SpringGenerator;
 import com.flit.protoc.gen.server.undertow.UndertowGenerator;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest;
@@ -22,7 +23,7 @@ public class Plugin {
 
   public CodeGeneratorResponse process() {
     if (!request.hasParameter()) {
-      return CodeGeneratorResponse.newBuilder().setError("Usage: --flit_out=target=server,type=[spring|undertow]:<PATH>").build();
+      return CodeGeneratorResponse.newBuilder().setError("Usage: --flit_out=target=server,type=[spring|undertow|jaxrs]:<PATH>").build();
     }
 
     Map<String, Parameter> params = Parameter.of(request.getParameter());
@@ -50,6 +51,8 @@ public class Plugin {
             return new SpringGenerator();
           case "undertow":
             return new UndertowGenerator();
+          case "jaxrs":
+            return new JaxrsGenerator();
           default:
             throw new GeneratorException("Unknown server type: " + params.get(PARAM_TYPE).getValue());
         }

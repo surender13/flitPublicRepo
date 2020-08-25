@@ -78,7 +78,7 @@ public class RpcHelloWorldHandler implements HttpHandler {
     Helloworld.HelloResp response = service.handleHello(data);
     exchange.setStatusCode(200);
     if (json) {
-      exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json;charset=UTF-8");
+      exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json; charset=utf-8");
       exchange.getResponseSender().send(JsonFormat.printer().omittingInsignificantWhitespace().print(response));
     } else {
       exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/protobuf");
@@ -104,7 +104,7 @@ public class RpcHelloWorldHandler implements HttpHandler {
     Helloworld.HelloResp response = service.handleHelloAgain(data);
     exchange.setStatusCode(200);
     if (json) {
-      exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json;charset=UTF-8");
+      exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json; charset=utf-8");
       exchange.getResponseSender().send(JsonFormat.printer().omittingInsignificantWhitespace().print(response));
     } else {
       exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/protobuf");

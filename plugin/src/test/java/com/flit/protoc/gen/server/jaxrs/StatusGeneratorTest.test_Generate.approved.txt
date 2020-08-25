@@ -12,18 +12,22 @@ import java.lang.Exception;
 import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 
-@RestController
-public class RpcStatusController {
-  @Autowired
-  private RpcStatus service;
+@Path("/twirp/com.example.helloworld.Status")
+public class RpcStatusResource {
+  private final RpcStatus service;
 
-  @PostMapping("/twirp/com.example.helloworld.Status/GetStatus")
-  public void handleGetStatus(HttpServletRequest request, HttpServletResponse response) throws
-      Exception {
+  public RpcStatusResource(RpcStatus service) {
+    this.service = service;
+  }
+
+  @POST
+  @Path("/GetStatus")
+  public void handleGetStatus(@Context HttpServletRequest request,
+      @Context HttpServletResponse response) throws Exception {
     boolean json = false;
     final Core.Empty data;
     if (request.getContentType().equals("application/protobuf")) {
@@ -35,6 +39,7 @@ public class RpcStatusController {
       data = builder.build();
     } else {
       response.setStatus(415);
+      response.flushBuffer();
       return;
     }
     StatusOuterClass.StatusResponse retval = service.handleGetStatus(data);
@@ -46,6 +51,7 @@ public class RpcStatusController {
       response.setContentType("application/protobuf");
       retval.writeTo(response.getOutputStream());
     }
+    response.flushBuffer();
   }
 }
 
